@@ -17,8 +17,14 @@ namespace CretaceousApi.Controllers
 
     // get: shops
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<Shop>>> Get()
+    public async Task<ActionResult<IEnumerable<Shop>>> Get(int lastIdNumber,)
     {
+
+int nextPage = context.Shops
+    .OrderBy(b => b.PostId)
+    .Where(b => b.PostId > lastId)
+    .Take(10)
+    .ToList();
       return await _db.Shops.ToListAsync();
     }
 
