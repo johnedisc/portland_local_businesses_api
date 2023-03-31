@@ -21,6 +21,7 @@ namespace PortlandLocalShopsApi.Controllers
     public async Task<ActionResult<IEnumerable<Shop>>> Get(string name, int lastIdNumber, string storeType, string musicType, string partOfTown)
     {
       IQueryable<Shop> query = _db.Shops.AsQueryable();
+
       if ( name != null)
       {
         query = query.Where(entry => entry.Name.Contains(name));
@@ -37,6 +38,7 @@ namespace PortlandLocalShopsApi.Controllers
       {
         query = query.Where(entry => entry.PartOfTown.Contains(partOfTown));
       }
+
       var queryResults = await query.ToListAsync();
       var pagedResults = Paginate(lastIdNumber, queryResults);
       return pagedResults.ToList();
