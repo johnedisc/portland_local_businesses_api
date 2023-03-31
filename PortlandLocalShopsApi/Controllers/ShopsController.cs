@@ -3,7 +3,7 @@ using PortlandLocalShopsApi.Models;
 using System.Data;
 using Microsoft.EntityFrameworkCore;
 
-namespace CretaceousApi.Controllers
+namespace PortlandLocalShopsApi.Controllers
 {
   [ApiController]
   [Route("[controller]")]
