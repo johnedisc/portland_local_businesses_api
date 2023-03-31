@@ -75,6 +75,21 @@ namespace CretaceousApi.Controllers
       return NoContent();
     }
 
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> DeleteShop(int id)
+    {
+      Shop shopToDeleteInstance = await _db.Shops.FindAsync(id);
+      if (shopToDeleteInstance == null)
+      {
+        return NotFound();
+      }
+
+      _db.Shops.Remove(shopToDeleteInstance);
+      await _db.SaveChangesAsync();
+
+      return NoContent();
+    }
+
     private bool ShopExists(int id)
     {
       return _db.Shops.Any(e => e.ShopId == id);

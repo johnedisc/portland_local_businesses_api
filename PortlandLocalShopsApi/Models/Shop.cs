@@ -5,6 +5,7 @@ namespace PortlandLocalShopsApi.Models
     public int ShopId { get; set; }
     public string Name { get; set; }
     public string StoreType { get; set; }
+    public string MusicType { get; set; }
     public string PartOfTown { get; set; }
   }
 }
