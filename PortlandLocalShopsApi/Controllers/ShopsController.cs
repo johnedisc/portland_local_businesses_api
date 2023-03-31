@@ -18,16 +18,28 @@ namespace PortlandLocalShopsApi.Controllers
 
     // get: shops
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<Shop>>> Get(string name, int lastIdNumber)
+    public async Task<ActionResult<IEnumerable<Shop>>> Get(string name, int lastIdNumber, string storeType, string musicType, string partOfTown)
     {
       IQueryable<Shop> query = _db.Shops.AsQueryable();
       if ( name != null)
       {
-        query = query.Where(entry => entry.Name == name);
+        query = query.Where(entry => entry.Name.Contains(name));
+      }
+      if ( storeType != null)
+      {
+        query = query.Where(entry => entry.StoreType.Contains(storeType));
+      }
+      if ( musicType != null)
+      {
+        query = query.Where(entry => entry.MusicType.Contains(musicType));
+      }
+      if ( partOfTown != null)
+      {
+        query = query.Where(entry => entry.PartOfTown.Contains(partOfTown));
       }
       var queryResults = await query.ToListAsync();
       var pagedResults = Paginate(lastIdNumber, queryResults);
-      return await pagedResults;
+      return pagedResults.ToList();
 //      return await query.ToListAsync();
 
     }
