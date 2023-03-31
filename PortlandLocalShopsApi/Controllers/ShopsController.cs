@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using PortlandLocalShopsApi.Models;
-using System.Linq;
+using System.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace CretaceousApi.Controllers
 {
@@ -18,29 +18,34 @@ namespace CretaceousApi.Controllers
 
     // get: shops
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<Shop>>> Get(int lastIdNumber, string name)
+    public async Task<ActionResult<IEnumerable<Shop>>> Get(string name)
     {
-      IQueryable<Shop> query = await _db.Shops.AsQueryable();
-
-      if (name != null)
+      IQueryable<Shop> query = _db.Shops.AsQueryable();
+      if ( name != null)
       {
         query = query.Where(entry => entry.Name == name);
       }
-      IEnumerable<Shop> queryResults = await query.ToListAsync();
-      IEnumerable<Shop> pagedResults = Paginate(lastIdNumber, queryResults);
-      return pagedResults;
+      return await query.ToListAsync();
+//
+//      if (name != null)
+//      {
+//        query = query.Where(entry => entry.Name == name);
+//      }
+//      var queryResults = await query.ToListAsync();
+//      var pagedResults = Paginate(lastIdNumber, queryResults);
+//      return pagedResults;
 
     }
 
-    public IEnumerable<Shop> Paginate(int lastIdNumber, IEnumerable<Shop> queryResults)
-    {
-      IEnumerable<Shop> nextPage = queryResults
-        .OrderBy(b => b.ShopId)
-        .Where(b => b.ShopId > lastIdNumber)
-        .Take(2)
-        .ToList();
-      return nextPage;
-    }
+//    private IEnumerable<Shop> Paginate(int lastIdNumber, IEnumerable<Shop> queryResults)
+//    {
+//      IEnumerable<Shop> nextPage = queryResults
+//        .OrderBy(b => b.ShopId)
+//        .Where(b => b.ShopId > lastIdNumber)
+//        .Take(2)
+//        .ToList();
+//      return nextPage;
+//    }
 
     // get: shops/{id}
     [HttpGet("{id}")]
