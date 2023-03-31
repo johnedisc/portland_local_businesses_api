@@ -1,0 +1,5 @@
+bin
+obj
+.netcoredbg
+session.nvim
+appsettings.json
