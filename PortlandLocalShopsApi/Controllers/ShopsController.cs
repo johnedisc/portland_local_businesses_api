@@ -17,22 +17,26 @@ namespace CretaceousApi.Controllers
 
     // get: shops
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<Shop>>> Get(int lastIdNumber,)
+    public async Task<ActionResult<IEnumerable<Shop>>> Get(int lastIdNumber, string name)
     {
       IQueryable<Shop> query = _db.Shops.AsQueryable();
 
       if (name != null)
       {
-        query = query.Where(entry => entry.Species == species);
+        query = query.Where(entry => entry.Name == name);
       }
+      var queryResults = query.ToListAsync()
+      return await Paginate(lastIdNumber)
 
-      return await query.ToListAsync()
+    }
 
-int nextPage = context.Shops
-    .OrderBy(b => b.PostId)
-    .Where(b => b.PostId > lastId)
-    .Take(10)
-    .ToList();
+    public async Task<ActionResult<IEnumerable<Shop>>> Paginate(int lastIdNumber,)
+    {
+      int nextPage = context.Shops
+        .OrderBy(b => b.ShopId)
+        .Where(b => b.ShopId > lastIdNumber)
+        .Take(2)
+        .ToList();
       return await _db.Shops.ToListAsync();
     }
 
