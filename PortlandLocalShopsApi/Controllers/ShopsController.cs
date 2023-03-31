@@ -18,34 +18,29 @@ namespace PortlandLocalShopsApi.Controllers
 
     // get: shops
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<Shop>>> Get(string name)
+    public async Task<ActionResult<IEnumerable<Shop>>> Get(string name, int lastIdNumber)
     {
       IQueryable<Shop> query = _db.Shops.AsQueryable();
       if ( name != null)
       {
         query = query.Where(entry => entry.Name == name);
       }
-      return await query.ToListAsync();
-//
-//      if (name != null)
-//      {
-//        query = query.Where(entry => entry.Name == name);
-//      }
-//      var queryResults = await query.ToListAsync();
-//      var pagedResults = Paginate(lastIdNumber, queryResults);
-//      return pagedResults;
+      var queryResults = await query.ToListAsync();
+      var pagedResults = Paginate(lastIdNumber, queryResults);
+      return await pagedResults;
+//      return await query.ToListAsync();
 
     }
 
-//    private IEnumerable<Shop> Paginate(int lastIdNumber, IEnumerable<Shop> queryResults)
-//    {
-//      IEnumerable<Shop> nextPage = queryResults
-//        .OrderBy(b => b.ShopId)
-//        .Where(b => b.ShopId > lastIdNumber)
-//        .Take(2)
-//        .ToList();
-//      return nextPage;
-//    }
+    private IEnumerable<Shop> Paginate(int lastIdNumber, IEnumerable<Shop> queryResults)
+    {
+      IEnumerable<Shop> nextPage = queryResults
+        .OrderBy(b => b.ShopId)
+        .Where(b => b.ShopId > lastIdNumber)
+        .Take(2)
+        .ToList();
+      return nextPage;
+    }
 
     // get: shops/{id}
     [HttpGet("{id}")]
