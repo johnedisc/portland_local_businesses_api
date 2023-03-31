@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PortlandLocalShopsApi.Models;
+using System.Linq;
 
 namespace CretaceousApi.Controllers
 {
@@ -19,25 +20,26 @@ namespace CretaceousApi.Controllers
     [HttpGet]
     public async Task<ActionResult<IEnumerable<Shop>>> Get(int lastIdNumber, string name)
     {
-      IQueryable<Shop> query = _db.Shops.AsQueryable();
+      IQueryable<Shop> query = await _db.Shops.AsQueryable();
 
       if (name != null)
       {
         query = query.Where(entry => entry.Name == name);
       }
-      var queryResults = query.ToListAsync()
-      return await Paginate(lastIdNumber)
+      IEnumerable<Shop> queryResults = await query.ToListAsync();
+      IEnumerable<Shop> pagedResults = Paginate(lastIdNumber, queryResults);
+      return pagedResults;
 
     }
 
-    public async Task<ActionResult<IEnumerable<Shop>>> Paginate(int lastIdNumber,)
+    public IEnumerable<Shop> Paginate(int lastIdNumber, IEnumerable<Shop> queryResults)
     {
-      int nextPage = context.Shops
+      IEnumerable<Shop> nextPage = queryResults
         .OrderBy(b => b.ShopId)
         .Where(b => b.ShopId > lastIdNumber)
         .Take(2)
         .ToList();
-      return await _db.Shops.ToListAsync();
+      return nextPage;
     }
 
     // get: shops/{id}
