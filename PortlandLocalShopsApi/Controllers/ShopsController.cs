@@ -19,6 +19,14 @@ namespace CretaceousApi.Controllers
     [HttpGet]
     public async Task<ActionResult<IEnumerable<Shop>>> Get(int lastIdNumber,)
     {
+      IQueryable<Shop> query = _db.Shops.AsQueryable();
+
+      if (name != null)
+      {
+        query = query.Where(entry => entry.Species == species);
+      }
+
+      return await query.ToListAsync()
 
 int nextPage = context.Shops
     .OrderBy(b => b.PostId)
