@@ -37,13 +37,47 @@ namespace CretaceousApi.Controllers
     }
 
     [HttpPost]
-public async Task<ActionResult<Shop>> PostTodoItem(Shop postedShopInstance)
-{
-    _db.Shops.Add(postedShopInstance);
-    await _db.SaveChangesAsync();
+    public async Task<ActionResult<Shop>> PostTodoItem(Shop postedShopInstance)
+    {
+      _db.Shops.Add(postedShopInstance);
+      await _db.SaveChangesAsync();
 
-    //    nameof just means: make a string of the action method to avoid hard-coding?
-    return CreatedAtAction(nameof(GetShop), new { id = postedShopInstance.ShopId }, postedShopInstance);
-}
+      //    nameof just means: make a string of the action method to avoid hard-coding?
+      return CreatedAtAction(nameof(GetShop), new { id = postedShopInstance.ShopId }, postedShopInstance);
+    }
+
+    [HttpPut("{id}")]
+    public async Task<IActionResult> PutShop(int id, Shop updatedShopInstance)
+    {
+      if (id != updatedShopInstance.ShopId)
+      {
+        return BadRequest();
+      }
+
+      _db.Shops.Update(updatedShopInstance);
+
+      try
+      {
+          await _db.SaveChangesAsync();
+      }
+      catch (DbUpdateConcurrencyException)
+      {
+        if (!ShopExists(id))
+        {
+          return NotFound();
+        }
+        else
+        {
+          throw;
+        }
+      }
+
+      return NoContent();
+    }
+
+    private bool ShopExists(int id)
+    {
+      return _db.Shops.Any(e => e.ShopId == id);
+    }
   }
 }
