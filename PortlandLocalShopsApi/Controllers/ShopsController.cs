@@ -51,7 +51,7 @@ namespace PortlandLocalShopsApi.Controllers
       IEnumerable<Shop> nextPage = queryResults
         .OrderBy(b => b.ShopId)
         .Where(b => b.ShopId > lastIdNumber)
-        .Take(2)
+        .Take(20)
         .ToList();
       return nextPage;
     }
