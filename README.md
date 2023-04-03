@@ -65,114 +65,87 @@ dotnet watch run --launch-profile "PortlandLocalShopsApi-Production"
 ```
 8. use your favorite program to make api calls (eg, [postman](https://www.postman.com/), [curl](https://curl.se/) on the command line, or with swagger). swagger can be found at [http://localhost:5250/swagger](http://localhost:5250/swagger)
 
-```
-GET http://localhost:5000/api/animals/
-GET http://localhost:5000/api/animals/{id}
-POST http://localhost:5000/api/animals/
-PUT http://localhost:5000/api/animals/{id}
-DELETE http://localhost:5000/api/animals/{id}
+```bash
+GET http://localhost:5250/portlandlocalshopsapi/
+GET http://localhost:5250/portlandlocalshopsapi/{id}
+POST http://localhost:5250/portlandlocalshopsapi/
+PUT http://localhost:5250/portlandlocalshopsapi/{id}
+DELETE http://localhost:5250/portlandlocalshopsapi/{id}
 ```
 
 Note: `{id}` is a variable and it should be replaced with the id number of the animal you want to GET, PUT, or DELETE.
 
 #### Optional Query String Parameters for GET Request
 
-GET requests to `http://localhost:5000/api/animals/` can optionally include query strings to filter or search animals.
+GET requests to `http://localhost:5250/portlandlocalshops/` can optionally include query strings to filter shops.
 
 | Parameter   | Type        |  Required    | Description |
 | ----------- | ----------- | -----------  | ----------- |
-| species     | String      | not required | Returns animals with a matching species value |
-| name        | String      | not required | Returns animals with a matching name value |
-| minimumAge  | Number      | not required | Returns animals that have an age value that is greater than or equal to the specified minimumAge value |
+| storeType   | String      | not required | Returns shops with a given type |
+| name        | String      | not required | Returns shops with a given name |
+| MusicType   | String      | not required | Returns shops that have a given music type |
+| partOfTown  | String      | not required | Returns shops that are located in a given part of town |
 
-The following query will return all animals with a species value of "Dinosaur":
+The following query will return all shops that have "jazz" music:
 
-```
-GET http://localhost:5000/api/animals?species=dinosaur
-```
-
-The following query will return all animals with the name "Matilda":
-
-```
-GET http://localhost:5000/api/animals?name=matilda
+```bash
+GET http://localhost:5250/portlandlocalshopsapi?musictype=jazz
 ```
 
-The following query will return all animals with an age of 10 or older:
+The following query will return all shops that are in ne:
 
-```
-GET http://localhost:5000/api/animals?minimumAge=10
+```bash
+GET http://localhost:5250/portlandlocalshopsapi?partoftown=ne
 ```
 
 You can include multiple query strings by separating them with an `&`:
 
-```
-GET http://localhost:5000/api/animals?species=dinosaur&minimumAge=10
+```bash
+GET http://localhost:5250/portlandlocalshopsapi?partoftown=ne&musictype=salsa
 ```
 
-#### Additional Requirements for POST Request
+#### for a POST request, you have to supply an entire unique object
 
-When making a POST request to `http://localhost:5000/api/animals/`, you need to include a **body**. Here's an example body in JSON:
+a body is required for the post to be successful
 
 ```json
-{
-  "species": "Tyrannosaurus Rex",
-  "name": "Elizabeth",
-  "age": 8
+{ 
+    "ShopId": 1,
+    "Name": "doug fir lounge",
+    "StoreType": "music venue",
+    "MusicType": "various, singer-songwriter, guitar-bass-drums",
+    "PartOfTown": "e, east" 
 }
 ```
 
-#### Additional Requirements for PUT Request
+#### PUT request
 
-When making a PUT request to `http://localhost:5000/api/animals/{id}`, you need to include a **body** that includes the animal's `animalId` property. Here's an example body in JSON:
+when making a put request, you must provide the whole object, not just the value that is changing. thus:
 
 ```json
-{
-  "animalId": 1,
-  "species": "Tyrannosaurus Rex",
-  "name": "Lizzy",
-  "age": 9
+{ 
+    "ShopId": 1,
+    "Name": "doug fir lounge",
+    "StoreType": "music venue",
+    "MusicType": "rock",
+    "PartOfTown": "e, east" 
+}
+```
+becomes
+```json
+{ 
+    "ShopId": 1,
+    "Name": "doug fir lounge",
+    "StoreType": "music venue",
+    "MusicType": "various, singer-songwriter, guitar-bass-drums",
+    "PartOfTown": "e, east" 
 }
 ```
 
-And here's the PUT request we would send the previous body to:
+#### pagination
 
-```
-http://localhost:5000/api/animals/1
-```
+requests made to `GET http://localhost:5250/portlandlocalshopsapi/` will return only 20 results at a time. this is called [keyset-pagination](https://learn.microsoft.com/en-us/ef/core/querying/pagination#keyset-pagination) and can referenced in the MSDOCS for a deeper dive. the basic idea here is that if there are hundreds or thousands of entries in this api, the client does not benefit from getting them all at once. what they will get instead is just 20 per page. 
 
-Notice that the value of `animalId` needs to match the id number in the URL. In this example, they are both 1.
+this method does not allow for random access of the database entries. thus, the client cannot skip from page 4 or results to page 8. they instead have to advance one page at a time. the benefit to this method is performance. instead of needing to calculate an offset and pass over potentially thousands of entries per request. the api will instead pass the client the id of the last entry passed. with that, when the next page is accessed, all that is needed to go directly to that list element.
 
-## Available Branches
-
-**1_setup_and_seeding**: This branch includes the code we added after working through the following lessons:
-
-- https://www.learnhowtoprogram.com/c-and-net/building-an-api/scaffolding-a-net-application-with-dotnet-new
-- https://www.learnhowtoprogram.com/c-and-net/building-an-api/exploring-the-dotnet-new-web-api-template
-- https://www.learnhowtoprogram.com/c-and-net/building-an-api/adding-a-model-and-database
-- https://www.learnhowtoprogram.com/c-and-net/building-an-api/seeding-the-database
-
-**2_crud_functionality**: This branch includes the code we added after working through the following lessons:
-
-- https://www.learnhowtoprogram.com/c-and-net/building-an-api/api-create-and-read
-- https://www.learnhowtoprogram.com/c-and-net/building-an-api/api-update-and-delete
-
-**3_query_strings**: This branch includes the code we added after working through the following lesson:
-
-- https://www.learnhowtoprogram.com/c-and-net/building-an-api/adding-parameters-to-a-get-request-to-support-query-strings
-
-**There are other lessons in this series, but the rest are not implemented in this example repo:**
-
-- https://www.learnhowtoprogram.com/c-and-net/building-an-api/adding-api-model-validation
-- https://www.learnhowtoprogram.com/c-and-net/building-an-api/scaffolding-api-controllers
-- https://www.learnhowtoprogram.com/c-and-net/building-an-api/further-exploration-with-apis
-
-
-
-
-https://localhost:7263;http://localhost:5250
-
-
-new Shop { ShopId = 1, Name = "doug fir lounge", StoreType = "music venue", MusicType = "various, singer-songwriter, guitar-bass-drums", PartOfTown = "e, east" }, new Shop { ShopId = 2, Name = "mississippi pizza", StoreType = "pizza restaurant, music venue", MusicType = "various, salsa, timba, singer-songwriter, guitar-bass-drums", PartOfTown = "ne, northeast" }, new Shop { ShopId = 3, Name = "the goodfoot", StoreType = "bar, music venue", MusicType = "various, funk, salsa, guitar-bass-drums", PartOfTown = "ne, northeast" }, new Shop { ShopId = 4, Name = "the 1905", StoreType = "bar, pizza, music venue", MusicType = "jazz", PartOfTown = "ne, northeast" }
-
-
--->
+the `lastIdNumber` is passed to the client in the form of a header with the header name: `X-Pagination`.

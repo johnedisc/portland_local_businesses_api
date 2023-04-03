@@ -2,6 +2,8 @@ using Microsoft.AspNetCore.Mvc;
 using PortlandLocalShopsApi.Models;
 using System.Data;
 using Microsoft.EntityFrameworkCore;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace PortlandLocalShopsApi.Controllers
 {
@@ -41,8 +43,12 @@ namespace PortlandLocalShopsApi.Controllers
 
       var queryResults = await query.ToListAsync();
       var pagedResults = Paginate(lastIdNumber, queryResults);
+        var metadata = new
+        {
+            lastIdNumber,
+        };
+        Response.Headers.Add("X-Pagination", JsonSerializer.Serialize(metadata));
       return pagedResults.ToList();
-//      return await query.ToListAsync();
 
     }
 
@@ -81,7 +87,7 @@ namespace PortlandLocalShopsApi.Controllers
     }
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> PutShop(int id, Shop updatedShopInstance)
+    public async Task<IActionResult> Put(int id, Shop updatedShopInstance)
     {
       if (id != updatedShopInstance.ShopId)
       {
@@ -110,7 +116,7 @@ namespace PortlandLocalShopsApi.Controllers
     }
 
     [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteShop(int id)
+    public async Task<IActionResult> Delete(int id)
     {
       Shop shopToDeleteInstance = await _db.Shops.FindAsync(id);
       if (shopToDeleteInstance == null)
