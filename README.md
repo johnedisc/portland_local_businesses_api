@@ -12,11 +12,11 @@ first, make sure that you have the [dotnet sdk](https://dotnet.microsoft.com/en-
 dotnet tool install --global dotnet-ef --version 6.0.0
 ```
 
-1. Clone this [repository](https://github.com/johnedisc/portland_local_businesses_api.git) to the directory of your choosing.
+1. clone this [repository](https://github.com/johnedisc/portland_local_businesses_api.git) to the directory of your choosing.
 ``` bash
 git clone https://github.com/johnedisc/portland_local_businesses_api.git
 ```
-2. Navigate to the PortlandLocalShopsApi directory(folder).
+2. navigate to the PortlandLocalShopsApi directory(folder).
 ``` bash
 cd portland_local_businesses_api/PortlandLocalShopsApi
 ```
@@ -148,4 +148,36 @@ requests made to `GET http://localhost:5250/portlandlocalshopsapi/` will return 
 
 this method does not allow for random access of the database entries. thus, the client cannot skip from page 4 or results to page 8. they instead have to advance one page at a time. the benefit to this method is performance. instead of needing to calculate an offset and pass over potentially thousands of entries per request. the api will instead pass the client the id of the last entry passed. with that, when the next page is accessed, all that is needed to go directly to that list element.
 
-the `lastIdNumber` is passed to the client in the form of a header with the header name: `X-Pagination`.
+the `lastIdNumber` is passed first to the api from the client when the next page is desired:
+```bash
+http://localhost:5250/portlandlocalshopsapi?lastIdNumber=21&partoftown=ne&musictype=salsa
+```
+a header with the name `X-Pagination` is returned to the client. it contains information about the previous query and can be used to make the next paging request.
+
+
+## license
+
+feel free to get in touch at [christopher(dot)johnedis(at)gmail(dot)com](christopher.johnedis@gmail.com)
+
+MIT License
+
+Copyright (c) [2023] [christopher johnedis]
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+

@@ -45,7 +45,12 @@ namespace PortlandLocalShopsApi.Controllers
       var pagedResults = Paginate(lastIdNumber, queryResults);
         var metadata = new
         {
-            lastIdNumber,
+          lastIdNumber,
+          queryResults = queryResults.Count,
+          name,
+          storeType,
+          musicType,
+          partOfTown
         };
         Response.Headers.Add("X-Pagination", JsonSerializer.Serialize(metadata));
       return pagedResults.ToList();
