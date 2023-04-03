@@ -71,7 +71,7 @@ namespace PortlandLocalShopsApi.Controllers
     }
 
     [HttpPost]
-    public async Task<ActionResult<Shop>> PostTodoItem(Shop postedShopInstance)
+    public async Task<ActionResult<Shop>> Post(Shop postedShopInstance)
     {
       _db.Shops.Add(postedShopInstance);
       await _db.SaveChangesAsync();

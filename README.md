@@ -4,27 +4,27 @@
 
 #### an excercise in making a simple asp.net webapi in c#
 
-<!--
+### install tools
 
-## How To Run This Project
+first, make sure that you have the [dotnet sdk](https://dotnet.microsoft.com/en-us/download) and dotnet entity framework tool installed.
 
-### Install Tools
-
-Install the tools that are introduced in [this series of lessons on LearnHowToProgram.com](https://www.learnhowtoprogram.com/c-and-net/getting-started-with-c).
-
-If you have not already, install the `dotnet-ef` tool by running the following command in your terminal:
-
-```
+``` bash
 dotnet tool install --global dotnet-ef --version 6.0.0
 ```
 
-### Set Up and Run Project
-
-1. Clone this repo.
-2. Open the terminal and navigate to this project's production directory called "CretaceousApi".
-3. Within the production directory "CretaceousApi", create two new files: `appsettings.json` and `appsettings.Development.json`.
-4. Within `appsettings.json`, put in the following code. Make sure to replacing the `uid` and `pwd` values in the MySQL database connection string with your own username and password for MySQL. For the LearnHowToProgram.com lessons, we always assume the `uid` is `root` and the `pwd` is `epicodus`.
-
+1. Clone this [repository](https://github.com/johnedisc/portland_local_businesses_api.git) to the directory of your choosing.
+``` bash
+git clone https://github.com/johnedisc/portland_local_businesses_api.git
+```
+2. Navigate to the PortlandLocalShopsApi directory(folder).
+``` bash
+cd portland_local_businesses_api/PortlandLocalShopsApi
+```
+3. create two new files in that directory `appsettings.json` and `appsettings.Development.json`.
+``` bash
+touch appsettings.json appsettings.Development.json
+```
+4. in appsettings, add the information below replacing database name, uid, pwd to suit your own situation.
 ```json
 {
   "Logging": {
@@ -35,12 +35,12 @@ dotnet tool install --global dotnet-ef --version 6.0.0
   },
   "AllowedHosts": "*",
   "ConnectionStrings": {
-    "DefaultConnection": "Server=localhost;Port=3306;database=cretaceous_api;uid=root;pwd=epicodus;"
+    "DefaultConnection": "Server=localhost;Port=3306;database=NAME_OF_YOUR_CHOOSING;uid=YOUR_USER_NAME;pwd=YOUR_PASSWORD;"
   }
 }
 ```
 
-5. Within `appsettings.Development.json`, add the following code:
+5. in appsettings.Development.json add the following.
 
 ```json
 {
@@ -55,19 +55,15 @@ dotnet tool install --global dotnet-ef --version 6.0.0
 }
 ```
 
-6. Create the database using the migrations in the Cretaceous Park API project. Open your shell (e.g., Terminal or GitBash) to the production directory "CretaceousApi", and run `dotnet ef database update`. You may need to run this command for each of the branches in this repo. 
-    - To optionally create a migration, run the command `dotnet ef migrations add MigrationName` where `MigrationName` is your custom name for the migration in UpperCamelCase. To learn more about migrations, visit the LHTP lesson [Code First Development and Migrations](https://www.learnhowtoprogram.com/c-and-net-part-time/many-to-many-relationships/code-first-development-and-migrations).
-7. Within the production directory "CretaceousApi", run `dotnet watch run --launch-profile "CretaceousApi-Production"` in the command line to start the project in production mode with a watcher. 
-8. To optionally further build out this project in development mode, start the project with `dotnet watch run` in the production directory "CretaceousApi".
-9. Use your program of choice to make API calls. In your API calls, use the domain _http://localhost:5000_. Keep reading to learn about all of the available endpoints.
-
-## Testing the API Endpoints
-
-You are welcome to test this API via [Postman](https://www.postman.com/), [curl](https://curl.se/), or [the ASP.NET Core MVC frontend "Cretaceous Park Client"](https://github.com/epicodus-lessons/section-6-cretaceous-park-api-csharp-net6) create to work with this API. 
-
-If you want to use the Cretaceous Park Client, an ASP.NET Core MVC application, follow the setup instructions in the README of [this repo](https://github.com/epicodus-lessons/section-6-cretaceous-park-api-csharp-net6). 
-
-### Available Endpoints
+6. next set up your local database with the following dotnet entity framework command
+``` bash
+dotnet ef database update
+```
+7. you are ready to start the api server. this will start the server in production mode. if you are going to develop it further, run the following without the --launch-profile
+``` bash
+dotnet watch run --launch-profile "PortlandLocalShopsApi-Production"
+```
+8. use your favorite program to make api calls (eg, [postman](https://www.postman.com/), [curl](https://curl.se/) on the command line, or with swagger). swagger can be found at [http://localhost:5250/swagger](http://localhost:5250/swagger)
 
 ```
 GET http://localhost:5000/api/animals/
